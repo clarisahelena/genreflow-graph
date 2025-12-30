@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 141 76% 48%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 70%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 12%;
+    --ring: 141 76% 48%;
+
+    --radius: 0.5rem;
+
+    /* Genre Colors - HSL versions */
+    --genre-pop: 359 94% 62%;
+    --genre-rock: 205 24% 45%;
+    --genre-jazz: 98 40% 59%;
+    --genre-hiphop: 43 93% 63%;
+
+    /* Canvas colors */
+    --canvas-bg: 0 0% 5%;
+    --canvas-grid: 0 0% 12%;
+    --canvas-node-bg: 0 0% 10%;
+
+    /* Animation colors */
+    --glow-current: 0 0% 100%;
+    --glow-candidate: 141 76% 48%;
+
+    /* Spotify specific */
+    --spotify-green: 141 76% 48%;
+    --spotify-dark: 0 0% 7%;
+    --spotify-darker: 0 0% 0%;
+    --spotify-light: 0 0% 18%;
+    --spotify-text: 0 0% 70%;
+    --spotify-hover: 0 0% 22%;
+
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 70%;
+    --sidebar-primary: 141 76% 48%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 141 76% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* Hide scrollbar but allow scrolling */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .genre-pop {
+    @apply bg-[hsl(var(--genre-pop))];
+  }
+  .genre-rock {
+    @apply bg-[hsl(var(--genre-rock))];
+  }
+  .genre-jazz {
+    @apply bg-[hsl(var(--genre-jazz))];
+  }
+  .genre-hiphop {
+    @apply bg-[hsl(var(--genre-hiphop))];
+  }
+
+  .node-pulse {
+    animation: nodePulse 2s ease-in-out infinite;
+  }
+
+  .node-glow {
+    animation: nodeGlow 1.5s ease-in-out infinite;
+  }
+
+  .edge-animated {
+    stroke-dasharray: 5 5;
+    animation: edgeDash 1s linear infinite;
+  }
+
+  .canvas-grid {
+    background-image: 
+      linear-gradient(hsl(var(--canvas-grid)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--canvas-grid)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Spotify-style music card */
+  .music-card {
+    @apply relative p-3 rounded-lg transition-all duration-200 cursor-pointer;
+  }
+  
+  .music-card:hover {
+    @apply bg-accent;
+  }
+
+  .music-card .play-btn {
+    @apply opacity-0 transition-all duration-300 translate-y-2;
+  }
+
+  .music-card:hover .play-btn {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Spotify button styles */
+  .spotify-btn {
+    @apply px-8 py-3 rounded-full font-bold text-sm transition-transform duration-200;
+  }
+
+  .spotify-btn:hover {
+    @apply scale-105;
+  }
+
+  /* Search bar style */
+  .search-bar {
+    @apply flex items-center bg-secondary rounded-full h-12 px-4 transition-all duration-200;
+  }
+
+  .search-bar:hover {
+    @apply bg-accent border border-border;
+  }
+
+  /* Icon button circular */
+  .icon-btn-circle {
+    @apply p-2 rounded-full bg-secondary text-secondary-foreground transition-all duration-200;
+  }
+
+  .icon-btn-circle:hover {
+    @apply text-foreground scale-105;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-[hsl(var(--genre-jazz))];
+  }
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--glow-current) / 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 8px hsl(var(--glow-current) / 0.3);
+  }
+}
+
+@keyframes nodeGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px 2px hsl(var(--glow-candidate) / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px 6px hsl(var(--glow-candidate) / 0.8);
+  }
+}
+
+@keyframes edgeDash {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Progress bar styling */
+input[type="range"] {
+  appearance: none;
+  background: hsl(var(--muted));
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background-color: hsl(var(--foreground));
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
