@@ -1,29 +1,31 @@
-import { motion } from 'framer-motion';
-import { useMusicStore } from '@/store/musicStore';
-import { GENRE_COLORS } from '@/types/music';
-import { 
-  Play, 
-  Pause, 
-  SkipBack, 
-  SkipForward, 
+import { motion } from "framer-motion";
+import { useMusicStore } from "@/store/musicStore";
+import { GENRE_COLORS } from "@/types/music";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
   Shuffle,
   Repeat,
   Volume2,
-  Music
-} from 'lucide-react';
-import { Slider } from '@/components/ui/slider';
-import { useState } from 'react';
+  Music,
+} from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { useState } from "react";
 
 export function PlayerBar() {
-  const { songs, playback, play, pause, next, previous, generateNewQueue } = useMusicStore();
+  const { songs, playback, play, pause, next, previous, generateNewQueue } =
+    useMusicStore();
   const [volume, setVolume] = useState(80);
   const [isShuffleActive, setIsShuffleActive] = useState(false);
   const [isRepeatActive, setIsRepeatActive] = useState(false);
-  
-  const currentSong = songs.find(s => s.id === playback.currentSongId);
-  const currentIndex = playback.queue.indexOf(playback.currentSongId || '');
-  const hasNext = currentIndex < playback.queue.length - 1;
-  const hasPrevious = currentIndex > 0;
+
+  const currentSong = songs.find((s) => s.id === playback.currentSongId);
+  const currentIndex = playback.queue.indexOf(playback.currentSongId || "");
+  // Allow looping: next/prev are available as long as there are songs in the queue
+  const hasNext = playback.queue.length > 0;
+  const hasPrevious = playback.queue.length > 0;
 
   const handleShuffle = () => {
     setIsShuffleActive(!isShuffleActive);
@@ -36,7 +38,7 @@ export function PlayerBar() {
       <div className="flex items-center gap-3 w-64">
         {currentSong ? (
           <>
-            <motion.div 
+            <motion.div
               key={currentSong.id}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -46,7 +48,7 @@ export function PlayerBar() {
               <Music className="w-6 h-6 text-background" />
             </motion.div>
             <div className="min-w-0">
-              <motion.p 
+              <motion.p
                 key={`title-${currentSong.id}`}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -76,22 +78,26 @@ export function PlayerBar() {
       <div className="flex flex-col items-center flex-1 max-w-xl">
         {/* Player Buttons */}
         <div className="flex items-center gap-4 mb-2">
-          <button 
+          <button
             onClick={handleShuffle}
-            className={`transition-all duration-200 ${isShuffleActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`transition-all duration-200 ${
+              isShuffleActive
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
             <Shuffle className="w-4 h-4" />
           </button>
-          
-          <button 
+
+          <button
             onClick={previous}
             disabled={!hasPrevious}
             className="text-muted-foreground hover:text-foreground disabled:opacity-30 transition-all duration-200"
           >
             <SkipBack className="w-5 h-5" />
           </button>
-          
-          <button 
+
+          <button
             onClick={playback.isPlaying ? pause : play}
             className="w-9 h-9 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 transition-transform"
           >
@@ -101,8 +107,8 @@ export function PlayerBar() {
               <Play className="w-5 h-5 ml-0.5" />
             )}
           </button>
-          
-          <button 
+
+          <button
             onClick={next}
             disabled={!hasNext}
             className="text-muted-foreground hover:text-foreground disabled:opacity-30 transition-all duration-200"
@@ -110,9 +116,13 @@ export function PlayerBar() {
             <SkipForward className="w-5 h-5" />
           </button>
 
-          <button 
+          <button
             onClick={() => setIsRepeatActive(!isRepeatActive)}
-            className={`transition-all duration-200 ${isRepeatActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`transition-all duration-200 ${
+              isRepeatActive
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
             <Repeat className="w-4 h-4" />
           </button>
@@ -120,7 +130,9 @@ export function PlayerBar() {
 
         {/* Progress Bar */}
         <div className="w-full flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground w-10 text-right">0:00</span>
+          <span className="text-[10px] text-muted-foreground w-10 text-right">
+            0:00
+          </span>
           <div className="flex-1 relative group">
             <Slider
               value={[playback.progress]}
@@ -130,7 +142,13 @@ export function PlayerBar() {
             />
           </div>
           <span className="text-[10px] text-muted-foreground w-10">
-            {currentSong ? `${Math.floor(currentSong.duration / 60)}:${(currentSong.duration % 60).toString().padStart(2, '0')}` : '0:00'}
+            {currentSong
+              ? `${Math.floor(currentSong.duration / 60)}:${(
+                  currentSong.duration % 60
+                )
+                  .toString()
+                  .padStart(2, "0")}`
+              : "0:00"}
           </span>
         </div>
       </div>
